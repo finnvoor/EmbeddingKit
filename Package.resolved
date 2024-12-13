@@ -1,5 +1,5 @@
 {
-  "originHash" : "39ad4cfad4fd27717659ecdbe562b101b160e293f7493062f5c15c61b90c6d35",
+  "originHash" : "751d403184341b8fd95459cad291d078e9b676c0c38c220ff236a10c425f7c50",
   "pins" : [
     {
       "identity" : "jinja",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "6dbe4c449469fb586d0f7339f900f0dd4d78b167",
         "version" : "1.0.6"
+      }
+    },
+    {
+      "identity" : "sqlitevec.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/finnvoor/SQLiteVec.swift.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "058d5f9fd94339fc3d3956a68d0c6c1fe7879488"
       }
     },
     {
