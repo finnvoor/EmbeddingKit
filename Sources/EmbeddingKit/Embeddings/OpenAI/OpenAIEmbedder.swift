@@ -45,10 +45,6 @@ public class OpenAIEmbedder: Embedder {
 
     public var dimensions: Int { model.dimensions }
 
-    public func embed(_ text: String) async throws -> [Float] {
-        try await embed([text])[0]
-    }
-
     public func embed(_ texts: [String]) async throws -> [[Float]] {
         let url = URL(string: "https://api.openai.com/v1/embeddings")!
         var request = URLRequest(url: url)

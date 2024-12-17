@@ -8,11 +8,7 @@ public protocol Embedder {
 }
 
 public extension Embedder {
-    func embed(_ texts: [String]) async throws -> [[Float]] {
-        var embeddings: [[Float]] = []
-        for text in texts {
-            try await embeddings.append(embed(text))
-        }
-        return embeddings
+    func embed(_ text: String) async throws -> [Float] {
+        try await embed([text])[0]
     }
 }
