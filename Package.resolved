@@ -1,5 +1,5 @@
 {
-  "originHash" : "751d403184341b8fd95459cad291d078e9b676c0c38c220ff236a10c425f7c50",
+  "originHash" : "b1b6ab24665b4423a7c05d4b37706e03eb1d5a29b87b34a62f4a4011762cb5cc",
   "pins" : [
     {
       "identity" : "jinja",
@@ -16,7 +16,7 @@
       "location" : "https://github.com/finnvoor/SQLiteVec.swift.git",
       "state" : {
         "branch" : "main",
-        "revision" : "058d5f9fd94339fc3d3956a68d0c6c1fe7879488"
+        "revision" : "15574c045b7d1b9bdc54f29bb2628210cddad0f8"
       }
     },
     {

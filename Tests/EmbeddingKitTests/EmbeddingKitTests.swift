@@ -10,7 +10,7 @@ import Testing
 
 @Test func testVectorStore() async throws {
     let embedder: Embedder = try await AllMiniLML6v2Embedder()
-    let vectorStore = try VectorStore(dimensions: embedder.dimensions)
+    let vectorStore = try VectorStore<String>(dimensions: embedder.dimensions)
 
     let sentences = [
         "Developers are awesome!",
@@ -18,13 +18,15 @@ import Testing
     ]
 
     let embeddings = try await embedder.embed(sentences)
-    for (index, embedding) in embeddings.enumerated() {
-        try vectorStore.insert(embedding, id: index)
+    for (embedding, sentence) in zip(embeddings, sentences) {
+        try vectorStore.insert(embedding, metadata: sentence)
     }
 
     let queryEmbeddings = try await embedder.embed("Developers are bad")
     let nearest = try vectorStore.findNearest(queryEmbeddings)
-    #expect(nearest == [1, 0])
+
+    #expect(nearest[0].metadata == sentences[1])
+    #expect(nearest[1].metadata == sentences[0])
 }
 
 @Test func testRetrieval() async throws {
@@ -35,17 +37,19 @@ import Testing
 
     let textSplitter: TextSplitter = NLTextSplitter(unit: .paragraph)
     let embedder: Embedder = try await AllMiniLML6v2Embedder()
-    let vectorStore = try VectorStore(dimensions: embedder.dimensions)
+    let vectorStore = try VectorStore<String>(dimensions: embedder.dimensions)
 
     let paragraphs = textSplitter.split(text)
     let embeddings = try await embedder.embed(paragraphs)
-    for (index, embedding) in embeddings.enumerated() {
-        try vectorStore.insert(embedding, id: index)
+
+    for (embedding, paragraph) in zip(embeddings, paragraphs) {
+        try vectorStore.insert(embedding, metadata: paragraph)
     }
 
     let queryEmbeddings = try await embedder.embed("Did cowboys wear cowboy hats?")
-    let nearest = try vectorStore.findNearest(queryEmbeddings, limit: 1)
+    let nearest = try vectorStore.findNearest(queryEmbeddings, limit: 1).first!
+
     print("--------------------")
-    print(paragraphs[nearest[0]])
+    print(nearest.metadata)
     print("--------------------")
 }
