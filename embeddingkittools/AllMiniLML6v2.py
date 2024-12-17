@@ -3,6 +3,13 @@ import torch
 import torch.nn.functional as F
 import coremltools as ct
 from utils import log
+import argparse
+
+parser = argparse.ArgumentParser(
+    prog="AllMiniLML6v2", description="Convert All-MiniLM-L6-v2 to CoreML"
+)
+parser.add_argument("--palettize", action="store_true", help="Palettize weights")
+args = parser.parse_args()
 
 
 class Model(torch.nn.Module):
@@ -43,6 +50,12 @@ mlmodel = ct.convert(
     outputs=[ct.TensorType(name="embeddings")],
     minimum_deployment_target=ct.target.macOS15,
 )
+
+if args.palettize:
+    log("Palettizing…")
+    op_config = ct.optimize.coreml.OpPalettizerConfig(nbits=4, weight_threshold=512)
+    config = ct.optimize.coreml.OptimizationConfig(global_config=op_config)
+    mlmodel = ct.optimize.coreml.palettize_weights(mlmodel, config)
 
 log("Saving…")
 mlmodel.author = "sentence-transformers"
