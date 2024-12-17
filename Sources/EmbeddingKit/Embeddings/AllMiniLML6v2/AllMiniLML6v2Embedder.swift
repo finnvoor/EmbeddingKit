@@ -23,8 +23,8 @@ public class AllMiniLML6v2Embedder: Embedder {
         let attentionMask: [Int32] = tokens.map { $0 == 0 ? 0 : 1 }
 
         let input = all_MiniLM_L6_v2Input(
-            input_ids: MLMultiArray(MLShapedArray(scalars: tokens, shape: [1, 512])),
-            attention_mask: MLMultiArray(MLShapedArray(scalars: attentionMask, shape: [1, 512]))
+            input_ids: MLShapedArray(scalars: tokens, shape: [1, 512]),
+            attention_mask: MLShapedArray(scalars: attentionMask, shape: [1, 512])
         )
 
         let output = try await model.prediction(input: input)

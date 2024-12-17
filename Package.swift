@@ -21,6 +21,10 @@ let package = Package(
                 .copy("Resources/AllMiniLML6v2"),
             ]
         ),
-        .testTarget(name: "EmbeddingKitTests", dependencies: ["EmbeddingKit"])
+        .testTarget(
+            name: "EmbeddingKitTests",
+            dependencies: ["EmbeddingKit"],
+            resources: [.process("Resources")]
+        )
     ]
 )
