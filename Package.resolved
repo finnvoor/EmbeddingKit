@@ -1,5 +1,5 @@
 {
-  "originHash" : "b1b6ab24665b4423a7c05d4b37706e03eb1d5a29b87b34a62f4a4011762cb5cc",
+  "originHash" : "2c5a592f0c06d944f5c3bfa0efd6c969fce22388d97e69bf12de20ab08d66566",
   "pins" : [
     {
       "identity" : "jinja",
@@ -35,6 +35,15 @@
       "state" : {
         "revision" : "d42fdae473c49ea216671da8caae58e102d28709",
         "version" : "0.1.14"
+      }
+    },
+    {
+      "identity" : "usearch",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:unum-cloud/usearch.git",
+      "state" : {
+        "revision" : "3964f83924431b61e5447da3f0701cbd18e97a26",
+        "version" : "2.16.7"
       }
     }
   ],

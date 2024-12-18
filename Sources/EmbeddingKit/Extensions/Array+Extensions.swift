@@ -1,4 +1,4 @@
-extension Array {
+public extension Array {
     func paddedOrTrimmed(to length: Int, with value: Element) -> Self {
         if count >= length {
             Array(prefix(length))
@@ -8,7 +8,7 @@ extension Array {
     }
 }
 
-extension [Int] {
+public extension [Int] {
     func paddedOrTrimmed(to length: Int) -> Self {
         paddedOrTrimmed(to: length, with: 0)
     }

@@ -1,4 +1,5 @@
 import CoreML
+import EmbeddingKit
 import Foundation
 import Tokenizers
 

@@ -1,6 +1,9 @@
+@testable import AllMiniLML6v2Embedder
 @testable import EmbeddingKit
 import Foundation
+@testable import SQLiteVecVectorStore
 import Testing
+@testable import USearchVectorStore
 
 @Test func testAllMiniLML6v2Embedder() async throws {
     let embedder: Embedder = try await AllMiniLML6v2Embedder()
@@ -10,23 +13,25 @@ import Testing
 
 @Test func testVectorStore() async throws {
     let embedder: Embedder = try await AllMiniLML6v2Embedder()
-    let vectorStore = try VectorStore<String>(dimensions: embedder.dimensions)
+    for vectorStore: VectorStore in try [
+        SQLiteVecVectorStore(dimensions: embedder.dimensions),
+        USearchVectorStore(dimensions: embedder.dimensions)
+    ] {
+        let sentences = [
+            "Developers are awesome!",
+            "Developers are miserable"
+        ]
 
-    let sentences = [
-        "Developers are awesome!",
-        "Developers are miserable"
-    ]
+        let embeddings = try await embedder.embed(sentences)
+        let ids = try vectorStore.insert(embeddings)
+        let mapping = Dictionary(uniqueKeysWithValues: zip(ids, sentences))
 
-    let embeddings = try await embedder.embed(sentences)
-    for (embedding, sentence) in zip(embeddings, sentences) {
-        try vectorStore.insert(embedding, metadata: sentence)
+        let queryEmbeddings = try await embedder.embed("Developers are bad")
+        let nearest = try vectorStore.findNearest(queryEmbeddings, limit: 2)
+
+        #expect(mapping[nearest[0].id] == sentences[1])
+        #expect(mapping[nearest[1].id] == sentences[0])
     }
-
-    let queryEmbeddings = try await embedder.embed("Developers are bad")
-    let nearest = try vectorStore.findNearest(queryEmbeddings)
-
-    #expect(nearest[0].metadata == sentences[1])
-    #expect(nearest[1].metadata == sentences[0])
 }
 
 @Test func testRetrieval() async throws {
@@ -37,19 +42,17 @@ import Testing
 
     let textSplitter: TextSplitter = NLTextSplitter(unit: .paragraph)
     let embedder: Embedder = try await AllMiniLML6v2Embedder()
-    let vectorStore = try VectorStore<String>(dimensions: embedder.dimensions)
+    let vectorStore: VectorStore = try SQLiteVecVectorStore(dimensions: embedder.dimensions)
 
     let paragraphs = textSplitter.split(text)
     let embeddings = try await embedder.embed(paragraphs)
-
-    for (embedding, paragraph) in zip(embeddings, paragraphs) {
-        try vectorStore.insert(embedding, metadata: paragraph)
-    }
+    let ids = try vectorStore.insert(embeddings)
+    let mapping = Dictionary(uniqueKeysWithValues: zip(ids, paragraphs))
 
     let queryEmbeddings = try await embedder.embed("Did cowboys wear cowboy hats?")
-    let nearest = try vectorStore.findNearest(queryEmbeddings, limit: 1).first!
+    let nearest = try vectorStore.findNearest(queryEmbeddings, limit: 1)[0]
 
     print("--------------------")
-    print(nearest.metadata)
+    print(mapping[nearest.id]!)
     print("--------------------")
 }

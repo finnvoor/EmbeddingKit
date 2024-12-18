@@ -8,23 +8,43 @@ let package = Package(
     products: [.library(name: "EmbeddingKit", targets: ["EmbeddingKit"])],
     dependencies: [
         .package(url: "https://github.com/huggingface/swift-transformers", from: "0.1.14"),
-        .package(url: "https://github.com/finnvoor/SQLiteVec.swift.git", branch: "main")
+        .package(url: "https://github.com/finnvoor/SQLiteVec.swift.git", branch: "main"),
+        .package(url: "git@github.com:unum-cloud/usearch.git", from: "2.16.7")
     ],
     targets: [
+        .target(name: "EmbeddingKit"),
         .target(
-            name: "EmbeddingKit",
+            name: "AllMiniLML6v2Embedder",
             dependencies: [
-                .product(name: "SQLiteVec", package: "SQLiteVec.swift"),
-                .product(name: "Transformers", package: "swift-transformers")
+                "EmbeddingKit",
+                .product(name: "Transformers", package: "swift-transformers"),
             ],
             resources: [
                 .copy("Resources/AllMiniLML6v2"),
             ]
         ),
+        .target(
+            name: "USearchVectorStore",
+            dependencies: [
+                "EmbeddingKit",
+                .product(name: "USearch", package: "usearch")
+            ]
+        ),
+        .target(
+            name: "SQLiteVecVectorStore",
+            dependencies: [
+                "EmbeddingKit",
+                .product(name: "SQLiteVec", package: "SQLiteVec.swift"),
+            ]
+        ),
         .testTarget(
             name: "EmbeddingKitTests",
-            dependencies: ["EmbeddingKit"],
-            resources: [.process("Resources")]
+            dependencies: [
+                "EmbeddingKit",
+                "AllMiniLML6v2Embedder",
+                "SQLiteVecVectorStore",
+                "USearchVectorStore"
+            ]
         )
     ]
 )

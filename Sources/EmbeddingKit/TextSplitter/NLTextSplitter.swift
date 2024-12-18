@@ -1,17 +1,17 @@
 import NaturalLanguage
 
-class NLTextSplitter: TextSplitter {
+public class NLTextSplitter: TextSplitter {
     // MARK: Lifecycle
 
-    init(unit: NLTokenUnit) {
+    public init(unit: NLTokenUnit) {
         self.unit = unit
     }
 
-    // MARK: Internal
+    // MARK: Public
 
-    let unit: NLTokenUnit
+    public let unit: NLTokenUnit
 
-    func split(_ text: String) -> [String] {
+    public func split(_ text: String) -> [String] {
         let tokenizer = NLTokenizer(unit: unit)
         tokenizer.string = text
         return tokenizer
