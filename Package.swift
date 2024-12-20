@@ -5,22 +5,33 @@ import PackageDescription
 let package = Package(
     name: "EmbeddingKit",
     platforms: [.iOS(.v18), .macOS(.v15)],
-    products: [.library(name: "EmbeddingKit", targets: ["EmbeddingKit"])],
+    products: [
+        .library(name: "EmbeddingKit", targets: ["EmbeddingKit"]),
+        .library(name: "MLXAllMiniLML6v2Embedder", targets: ["MLXAllMiniLML6v2Embedder"])
+    ],
     dependencies: [
         .package(url: "https://github.com/huggingface/swift-transformers", from: "0.1.14"),
         .package(url: "https://github.com/finnvoor/SQLiteVec.swift.git", branch: "main"),
-        .package(url: "git@github.com:unum-cloud/usearch.git", from: "2.16.7")
+        .package(url: "git@github.com:unum-cloud/usearch.git", from: "2.16.7"),
+        .package(url: "https://github.com/ml-explore/mlx-swift-examples.git", branch: "main"),
     ],
     targets: [
         .target(name: "EmbeddingKit"),
         .target(
-            name: "AllMiniLML6v2Embedder",
+            name: "CoreMLAllMiniLML6v2Embedder",
             dependencies: [
                 "EmbeddingKit",
                 .product(name: "Transformers", package: "swift-transformers"),
             ],
             resources: [
                 .copy("Resources/AllMiniLML6v2"),
+            ]
+        ),
+        .target(
+            name: "MLXAllMiniLML6v2Embedder",
+            dependencies: [
+                "EmbeddingKit",
+                .product(name: "MLXEmbedders", package: "mlx-swift-examples")
             ]
         ),
         .target(
@@ -41,7 +52,8 @@ let package = Package(
             name: "EmbeddingKitTests",
             dependencies: [
                 "EmbeddingKit",
-                "AllMiniLML6v2Embedder",
+                "CoreMLAllMiniLML6v2Embedder",
+                "MLXAllMiniLML6v2Embedder",
                 "SQLiteVecVectorStore",
                 "USearchVectorStore"
             ]

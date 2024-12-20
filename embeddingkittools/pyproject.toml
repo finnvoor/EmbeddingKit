@@ -7,5 +7,8 @@ requires-python = ">=3.11"
 dependencies = [
     "coremltools>=8.1",
     "torch>=2.5.1",
-    "transformers>=4.47.0",
+    "transformers",
 ]
+
+[tool.uv.sources]
+transformers = { git = "https://github.com/huggingface/transformers.git" }
