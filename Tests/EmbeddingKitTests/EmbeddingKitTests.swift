@@ -46,7 +46,7 @@ import Testing
 
     for embedder: any Embedder in try await [
         MLXAllMiniLML6v2Embedder(),
-        CoreMLAllMiniLML6v2Embedder(),
+        CoreMLAllMiniLML6v2Embedder()
     ] {
         let startTime = Date()
         let embeddings = try await embedder.embed(paragraphs)

@@ -7,7 +7,10 @@ let package = Package(
     platforms: [.iOS(.v18), .macOS(.v15)],
     products: [
         .library(name: "EmbeddingKit", targets: ["EmbeddingKit"]),
-        .library(name: "MLXAllMiniLML6v2Embedder", targets: ["MLXAllMiniLML6v2Embedder"])
+        .library(name: "CoreMLAllMiniLML6v2Embedder", targets: ["CoreMLAllMiniLML6v2Embedder"]),
+        .library(name: "MLXAllMiniLML6v2Embedder", targets: ["MLXAllMiniLML6v2Embedder"]),
+        .library(name: "USearchVectorStore", targets: ["USearchVectorStore"]),
+        .library(name: "SQLiteVecVectorStore", targets: ["SQLiteVecVectorStore"])
     ],
     dependencies: [
         .package(url: "https://github.com/huggingface/swift-transformers", from: "0.1.14"),
